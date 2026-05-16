@@ -1,0 +1,48 @@
+extends CharacterBody2D
+
+signal died
+
+const GRAVITY := 1400.0
+const FLAP_VELOCITY := -400.0
+const MAX_FALL_SPEED := 700.0
+
+var frozen: bool = true
+var dead: bool = false
+
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var flap_sound: AudioStreamPlayer = $FlapSound
+@onready var hit_sound: AudioStreamPlayer = $HitSound
+@onready var die_sound: AudioStreamPlayer = $DieSound
+
+
+func _ready() -> void:
+	sprite.play("flap")
+
+
+func _physics_process(delta: float) -> void:
+	if frozen or dead:
+		return
+	velocity.y += GRAVITY * delta
+	velocity.y = min(velocity.y, MAX_FALL_SPEED)
+	rotation = clamp(velocity.y / 600.0, -0.5, 1.2)
+	move_and_slide()
+
+
+func flap() -> void:
+	if dead:
+		return
+	frozen = false
+	velocity.y = FLAP_VELOCITY
+	flap_sound.play()
+
+
+func die() -> void:
+	if dead:
+		return
+	dead = true
+	hit_sound.play()
+	# Play die sound shortly after hit so they don't overlap
+	var tween := create_tween()
+	tween.tween_interval(0.4)
+	tween.tween_callback(func(): die_sound.play())
+	died.emit()

@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/bird.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://scenes/bird_frames.tres" id="2_frames"]
+[ext_resource type="AudioStream" path="res://assets/audio/wing.ogg" id="3_wing"]
+[ext_resource type="AudioStream" path="res://assets/audio/hit.ogg" id="4_hit"]
+[ext_resource type="AudioStream" path="res://assets/audio/die.ogg" id="5_die"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 12.0
+
+[node name="Bird" type="CharacterBody2D"]
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_frames")
+animation = &"flap"
+autoplay = "flap"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
+
+[node name="FlapSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_wing")
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_hit")
+
+[node name="DieSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_die")
