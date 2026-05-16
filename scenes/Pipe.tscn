@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/pipe.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pipe-green.png" id="2_pipe"]
+
+[sub_resource type="RectangleShape2D" id="RectShape_pipe"]
+size = Vector2(52, 320)
+
+[sub_resource type="RectangleShape2D" id="RectShape_score"]
+size = Vector2(8, 130)
+
+[node name="Pipe" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="TopPipe" type="Sprite2D" parent="."]
+texture = ExtResource("2_pipe")
+centered = false
+flip_v = true
+
+[node name="BottomPipe" type="Sprite2D" parent="."]
+texture = ExtResource("2_pipe")
+centered = false
+
+[node name="TopBody" type="StaticBody2D" parent="."]
+
+[node name="TopCollision" type="CollisionShape2D" parent="TopBody"]
+shape = SubResource("RectShape_pipe")
+
+[node name="BottomBody" type="StaticBody2D" parent="."]
+
+[node name="BottomCollision" type="CollisionShape2D" parent="BottomBody"]
+shape = SubResource("RectShape_pipe")
+
+[node name="ScoreZone" type="Area2D" parent="."]
+
+[node name="ScoreCollision" type="CollisionShape2D" parent="ScoreZone"]
+shape = SubResource("RectShape_score")
