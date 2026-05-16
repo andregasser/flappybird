@@ -16,6 +16,7 @@ var score: int = 0
 @onready var hud = $HUD
 @onready var pipe_spawner: Timer = $PipeSpawner
 @onready var pipes_container: Node2D = $Pipes
+@onready var bgm: AudioStreamPlayer = $BGM
 
 
 func _ready() -> void:
@@ -25,6 +26,16 @@ func _ready() -> void:
 	bird.died.connect(_on_bird_died)
 	pipe_spawner.timeout.connect(_on_spawn_pipe)
 	hud.set_score(0)
+	_start_bgm()
+
+
+func _start_bgm() -> void:
+	if bgm.stream == null:
+		return
+	# Enable looping on the stream (works for AudioStreamMP3, OggVorbis, etc.)
+	if "loop" in bgm.stream:
+		bgm.stream.loop = true
+	bgm.play()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -72,6 +83,11 @@ func _on_bird_died() -> void:
 	# Stop all pipes from moving
 	for pipe in pipes_container.get_children():
 		pipe.set_process(false)
+	# Fade out BGM
+	if bgm.playing:
+		var bgm_tween := create_tween()
+		bgm_tween.tween_property(bgm, "volume_db", -40.0, 0.6)
+		bgm_tween.tween_callback(bgm.stop)
 	# Wait briefly, then transition to GameOver
 	GameState.submit_score(score)
 	var tween := create_tween()
