@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ground.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/base.png" id="2_base"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(432, 112)
+
+[node name="Ground" type="Node2D"]
+script = ExtResource("1_script")
+position = Vector2(0, 672)
+
+[node name="TileA" type="Sprite2D" parent="."]
+texture = ExtResource("2_base")
+centered = false
+position = Vector2(0, 0)
+
+[node name="TileB" type="Sprite2D" parent="."]
+texture = ExtResource("2_base")
+centered = false
+position = Vector2(0, 0)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(216, 56)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_1")
