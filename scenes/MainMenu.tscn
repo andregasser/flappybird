@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/background-day.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/message.png" id="3_msg"]
+[ext_resource type="AudioStream" path="res://assets/audio/swoosh.ogg" id="4_swoosh"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("2_bg")
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(1.5, 1.5)
+
+[node name="Message" type="Sprite2D" parent="."]
+texture = ExtResource("3_msg")
+position = Vector2(216, 384)
+scale = Vector2(1.5, 1.5)
+
+[node name="SwooshSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_swoosh")
