@@ -2,8 +2,8 @@ extends Node2D
 
 signal scored
 
-const SPEED := 100.0
-const GAP_SIZE := 130.0
+const SPEED := 85.0
+const GAP_SIZE := 170.0
 
 @onready var top_pipe: Sprite2D = $TopPipe
 @onready var bottom_pipe: Sprite2D = $BottomPipe

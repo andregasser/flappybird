@@ -1,6 +1,6 @@
 extends Node2D
 
-const SCROLL_SPEED := 100.0
+const SCROLL_SPEED := 85.0
 
 @onready var tile_a: Sprite2D = $TileA
 @onready var tile_b: Sprite2D = $TileB

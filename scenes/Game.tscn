@@ -23,7 +23,7 @@ position = Vector2(100, 384)
 [node name="Ground" parent="." instance=ExtResource("4_ground")]
 
 [node name="PipeSpawner" type="Timer" parent="."]
-wait_time = 1.5
+wait_time = 1.8
 autostart = false
 
 [node name="HUD" parent="." instance=ExtResource("5_hud")]
