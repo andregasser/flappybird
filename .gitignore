@@ -1,0 +1,17 @@
+# Godot 4 specific
+.godot/
+.import/
+export.cfg
+export_presets.cfg
+
+# Mono / C# (unused, but defensive)
+.mono/
+data_*/
+mono_crash.*.json
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*~
