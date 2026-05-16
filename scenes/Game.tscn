@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/background-day.png" id="2_bg"]
+[ext_resource type="PackedScene" path="res://scenes/Bird.tscn" id="3_bird"]
+[ext_resource type="PackedScene" path="res://scenes/Ground.tscn" id="4_ground"]
+[ext_resource type="PackedScene" path="res://scenes/HUD.tscn" id="5_hud"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("2_bg")
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(1.5, 1.5)
+
+[node name="Pipes" type="Node2D" parent="."]
+
+[node name="Bird" parent="." instance=ExtResource("3_bird")]
+position = Vector2(100, 384)
+
+[node name="Ground" parent="." instance=ExtResource("4_ground")]
+
+[node name="PipeSpawner" type="Timer" parent="."]
+wait_time = 1.5
+autostart = false
+
+[node name="HUD" parent="." instance=ExtResource("5_hud")]

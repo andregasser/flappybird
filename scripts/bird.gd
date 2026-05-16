@@ -5,6 +5,7 @@ signal died
 const GRAVITY := 1400.0
 const FLAP_VELOCITY := -400.0
 const MAX_FALL_SPEED := 700.0
+const GROUND_TOP_Y := 672.0
 
 var frozen: bool = true
 var dead: bool = false
@@ -26,6 +27,10 @@ func _physics_process(delta: float) -> void:
 	velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	rotation = clamp(velocity.y / 600.0, -0.5, 1.2)
 	move_and_slide()
+	if get_slide_collision_count() > 0:
+		die()
+	elif global_position.y > GROUND_TOP_Y:
+		die()
 
 
 func flap() -> void:
