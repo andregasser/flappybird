@@ -56,9 +56,10 @@ func die() -> void:
 func revive() -> void:
 	dead = false
 	frozen = false
-	velocity = Vector2.ZERO
+	velocity = Vector2(0, FLAP_VELOCITY)
 	global_position.x -= 60.0
 	rotation = 0.0
+	flap_sound.play()
 	_start_invincibility()
 
 

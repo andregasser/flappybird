@@ -119,6 +119,7 @@ func _on_puzzle_answered(correct: bool) -> void:
 	if correct:
 		quiz_attempts = 0
 		puzzle_overlay.hide_overlay()
+		_clear_pipes_ahead()
 		_resume_world()
 		bird.revive()
 		state = State.PLAYING
@@ -129,6 +130,12 @@ func _on_puzzle_answered(correct: bool) -> void:
 			_trigger_game_over()
 		else:
 			_show_next_puzzle()
+
+
+func _clear_pipes_ahead() -> void:
+	for pipe in pipes_container.get_children():
+		if pipe.position.x > bird.position.x:
+			pipe.queue_free()
 
 
 func _trigger_game_over() -> void:
