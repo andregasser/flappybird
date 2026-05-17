@@ -36,3 +36,4 @@ textures/canvas_textures/default_texture_filter=0
 [autoload]
 
 GameState="*res://scripts/game_state.gd"
+PuzzleBank="*res://scripts/puzzle_bank.gd"
