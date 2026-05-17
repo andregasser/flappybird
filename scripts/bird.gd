@@ -6,6 +6,8 @@ const GRAVITY := 700.0
 const FLAP_VELOCITY := -280.0
 const MAX_FALL_SPEED := 450.0
 const GROUND_TOP_Y := 672.0
+const HOME_X := 100.0
+const HOME_Y := 384.0
 
 var frozen: bool = true
 var dead: bool = false
@@ -57,7 +59,7 @@ func revive() -> void:
 	dead = false
 	frozen = false
 	velocity = Vector2(0, FLAP_VELOCITY)
-	global_position.x -= 60.0
+	global_position = Vector2(HOME_X, HOME_Y)
 	rotation = 0.0
 	flap_sound.play()
 	_start_invincibility()

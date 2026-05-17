@@ -25,7 +25,7 @@ var quiz_attempts: int = 0
 
 func _ready() -> void:
 	randomize()
-	bird.position = Vector2(100, 384)
+	bird.position = Vector2(bird.HOME_X, bird.HOME_Y)
 	bird.frozen = true
 	bird.died.connect(_on_bird_died)
 	pipe_spawner.timeout.connect(_on_spawn_pipe)
