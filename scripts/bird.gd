@@ -51,3 +51,24 @@ func die() -> void:
 	tween.tween_interval(0.4)
 	tween.tween_callback(func(): die_sound.play())
 	died.emit()
+
+
+func revive() -> void:
+	dead = false
+	frozen = false
+	velocity = Vector2.ZERO
+	global_position.x -= 60.0
+	rotation = 0.0
+	_start_invincibility()
+
+
+func _start_invincibility() -> void:
+	set_collision_layer_value(1, false)
+	set_collision_mask_value(1, false)
+	var tween := create_tween().set_loops(5)
+	tween.tween_property(sprite, "modulate:a", 0.3, 0.1)
+	tween.tween_property(sprite, "modulate:a", 1.0, 0.1)
+	await tween.finished
+	set_collision_layer_value(1, true)
+	set_collision_mask_value(1, true)
+	sprite.modulate.a = 1.0
