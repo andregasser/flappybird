@@ -1,6 +1,6 @@
 extends Node2D
 
-enum State { WAITING, PLAYING, DEAD }
+enum State { WAITING, PLAYING, QUIZ, DEAD }
 
 const PIPE_SCENE := preload("res://scenes/Pipe.tscn")
 const VIEWPORT_HEIGHT := 768
@@ -8,15 +8,19 @@ const VIEWPORT_WIDTH := 432
 const GROUND_TOP_Y := 672
 const PIPE_GAP_MIN_Y := 200
 const PIPE_GAP_MAX_Y := 568
+const MAX_QUIZ_ATTEMPTS := 3
 
 var state: State = State.WAITING
 var score: int = 0
+var quiz_attempts: int = 0
 
 @onready var bird = $Bird
 @onready var hud = $HUD
 @onready var pipe_spawner: Timer = $PipeSpawner
 @onready var pipes_container: Node2D = $Pipes
 @onready var bgm: AudioStreamPlayer = $BGM
+@onready var ground = $Ground
+@onready var puzzle_overlay = $PuzzleOverlay
 
 
 func _ready() -> void:
@@ -25,14 +29,15 @@ func _ready() -> void:
 	bird.frozen = true
 	bird.died.connect(_on_bird_died)
 	pipe_spawner.timeout.connect(_on_spawn_pipe)
+	puzzle_overlay.answered.connect(_on_puzzle_answered)
 	hud.set_score(0)
+	PuzzleBank.start_round()
 	_start_bgm()
 
 
 func _start_bgm() -> void:
 	if bgm.stream == null:
 		return
-	# Enable looping on the stream (works for AudioStreamMP3, OggVorbis, etc.)
 	if "loop" in bgm.stream:
 		bgm.stream.loop = true
 	bgm.play()
@@ -58,6 +63,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			bird.flap()
 		State.PLAYING:
 			bird.flap()
+		State.QUIZ:
+			pass
 		State.DEAD:
 			pass
 
@@ -71,24 +78,68 @@ func _on_spawn_pipe() -> void:
 
 
 func _on_pipe_scored() -> void:
+	if state != State.PLAYING:
+		return
 	score += 1
 	hud.set_score(score)
 
 
 func _on_bird_died() -> void:
-	if state == State.DEAD:
+	if state == State.QUIZ or state == State.DEAD:
 		return
-	state = State.DEAD
+	state = State.QUIZ
+	quiz_attempts = 0
+	_pause_world()
+	_show_next_puzzle()
+
+
+func _pause_world() -> void:
+	bird.frozen = true
 	pipe_spawner.stop()
-	# Stop all pipes from moving
 	for pipe in pipes_container.get_children():
 		pipe.set_process(false)
-	# Fade out BGM
+	ground.set_process(false)
+	bgm.stream_paused = true
+
+
+func _resume_world() -> void:
+	pipe_spawner.start()
+	for pipe in pipes_container.get_children():
+		pipe.set_process(true)
+	ground.set_process(true)
+	bgm.stream_paused = false
+
+
+func _show_next_puzzle() -> void:
+	var puzzle = PuzzleBank.next_puzzle()
+	puzzle_overlay.show_puzzle(puzzle, quiz_attempts + 1)
+
+
+func _on_puzzle_answered(correct: bool) -> void:
+	if correct:
+		quiz_attempts = 0
+		puzzle_overlay.hide_overlay()
+		_resume_world()
+		bird.revive()
+		state = State.PLAYING
+	else:
+		quiz_attempts += 1
+		if quiz_attempts >= MAX_QUIZ_ATTEMPTS:
+			puzzle_overlay.hide_overlay()
+			_trigger_game_over()
+		else:
+			_show_next_puzzle()
+
+
+func _trigger_game_over() -> void:
+	state = State.DEAD
+	pipe_spawner.stop()
+	for pipe in pipes_container.get_children():
+		pipe.set_process(false)
 	if bgm.playing:
 		var bgm_tween := create_tween()
 		bgm_tween.tween_property(bgm, "volume_db", -40.0, 0.6)
 		bgm_tween.tween_callback(bgm.stop)
-	# Wait briefly, then transition to GameOver
 	GameState.submit_score(score)
 	var tween := create_tween()
 	tween.tween_interval(0.8)
