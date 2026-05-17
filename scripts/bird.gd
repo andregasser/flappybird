@@ -2,9 +2,9 @@ extends CharacterBody2D
 
 signal died
 
-const GRAVITY := 1000.0
-const FLAP_VELOCITY := -350.0
-const MAX_FALL_SPEED := 600.0
+const GRAVITY := 700.0
+const FLAP_VELOCITY := -280.0
+const MAX_FALL_SPEED := 450.0
 const GROUND_TOP_Y := 672.0
 
 var frozen: bool = true
